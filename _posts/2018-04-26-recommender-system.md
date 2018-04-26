@@ -1,8 +1,8 @@
 ---
 layout: post
 title: >-
-    Recommendation System Based on Item-Item Collaborative Filtering using
-  Hadoop MapReduce
+  Recommendation System Based on Item-Item Collaborative Filtering using Hadoop
+  MapReduce
 categories: mapreduce
 author: I ON
 meta: Springfield
