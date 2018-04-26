@@ -3,8 +3,8 @@ layout: post
 title: >-
     Recommendation System Based on Item-Item Collaborative Filtering using
   Hadoop MapReduce
-categories: junk
-author: Bart Simpson
+categories: mapreduce
+author: I ON
 meta: Springfield
 published: true
 ---
