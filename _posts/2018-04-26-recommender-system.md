@@ -282,7 +282,6 @@ For comparison purposes, we also run just the first three steps of the MapReduce
 "B000056HNX"|["B000056OUF", 0.96715211568869, 23]
 "B000056HNX"|["B000056OUH", 0.9713586960611499, 38]
 "B000056HNX"|["B0000AY9XY", 0.997040538050167, 12]
-...
 
 
 Note that this job was run on one machine only, which is why we obtain a nicely sorted output. When running the job on multiple machines using multiple reducers, however, the results will be only partially sorted. In this case we would find an ordered set of records for the item ID "B0003TL7P", for instance, at the beginning of the list as well as further down - in several groupings, depending on the number of machines the job was distributed to. This is because the reducers performing the sorting exercise run on various machines, each emitting an individually sorted output. One way of tackling this issue is by using a partitioner that respects the order of the output, making sure partition sizes are chosen to be fairly even so that job times are not dominated by a single reducer (White, 2015).
