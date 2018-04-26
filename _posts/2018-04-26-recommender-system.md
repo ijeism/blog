@@ -249,7 +249,7 @@ The information on runtime of map and reduce tasks also gives an idea of how man
 For comparison purposes, we also run just the first three steps of the MapReduce job in order to generate the entire list of items with their respective list of similar products. Runtimes for steps 1-3 are similar to the ones reported for the Recommendation job. The following is an excerpt of the first couple of rows of output from this MapReduce job:
 
 "ITEM ID"|["ITEM ID", SIMILARITY SCORE, NUMBER OF CO-RATINGS]
---|---
+---|---
 "B00003TL7P"|["B0002N3OMG", 0.9507868781289148, 14]
 "B00003TL7P"|["B00005BTB1", 0.9541089219908963, 12]
 "B00003TL7P"|["B000056OV0", 0.9555225962625125, 31]
