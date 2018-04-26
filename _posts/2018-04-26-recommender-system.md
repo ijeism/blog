@@ -79,6 +79,8 @@ Figure 4 shows the output from Mapper and Reducer in the second step. Note that 
 
 A critical design element of implementing collaborative filtering is the choice of similarity function. We choose the popularly adopted cosine similarity function that is simple, fast and typically produces good predictive accuracy (Ekstrand et al., 2011). Cosine similarity is a vector-space approach based on linear algebra. Items are represented as n - dimensional vectors, and similarity is measured by the cosine distance, i.e. the cosine of the angle, between two rating vectors (Perone, 2013; Ekstrand et al., 2011). The cosine distance is computed by dividing the dot products of two rating vectors by the product of the square root of their sums:
 
+![]({{site.baseurl}}/assets/equation.png)
+
 The third step involves sorting and filtering, as illustrated in Figure 5, to generate a meaningfully sorted output as well as to prepare for effective information retrieval. Since a recommendation system typically deals with an enormous number of items, we want to decrease the density of the similarity matrix generated in Step 2 (Schelter et al., 2012). To do this we get rid of pairs with near-zero similarity by specifying a similarity threshold and size constraint to prune lower scoring item pairs. This threshold is best determined experimentally to avoid negative effects in prediction quality, as it depends on the particular data at hand. 
 
 ![]({{site.baseurl}}/assets/mr_step3.png)
