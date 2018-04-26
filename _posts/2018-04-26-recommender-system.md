@@ -64,7 +64,7 @@ The item-based collaborative filtering algorithim is implemented using the Hadoo
 The first step of our multi-step MapReduce job is responsible for creating an Inverted Index, which is a specific data structure that is used for information retrieval (Lin & Dyer, 2010). An inverted index basically provides a mapping from content to some related information, e.g. its location. In our case, the Inverted Index generates a list of (itemID, rating) pairs for each user ID. i.e. a list of items a specific user has previously purchased with their respective ratings. This job is divided into a map and a reduce job (see Figure 1): the mapper emits key-value pairs, where each key is a user ID and the value an (itemID, rating) pair; the reducer creates the inverted index, emitting userID as key and a list of associated (itemID, rating) pairs as value. Figure 3 illustrates the output from Mapper and Reducer, where ux reprsents a particular user, ix a particular itemID, and the numbers 1-5 the rating given.
 
 ![]({{site.baseurl}}/assets/mr_step1.png)
-#### Figure 3 Map and Reduce jobs of Step 1.
+##### Figure 3 Map and Reduce jobs of Step 1.
 
 The second step is responsible for the similarity computation phase of the recommendation problem, i.e. for generating a similarity matrix (Ekstrand et al., 2011), and is also divided into a map and a reduce job. The mapper emits key-value pairs where each key is a pair of item IDs and the value is the associated rating pair. As outlined in more detail in Section 4.3, the reducer is responsible for computing the similarity among emitted item IDs. The similarity computation involves:
 
@@ -73,7 +73,7 @@ ii.	the conversion of rating pairs into vectors, and
 iii.	finally the computation of similarity between two rating vectors. (Somani, 2015).  
 
 ![]({{site.baseurl}}/assets/mr_step2.png)
-#### Figure 4 Output Map and Reduce jobs of Step 2.
+##### Figure 4 Output Map and Reduce jobs of Step 2.
 
 Figure 4 shows the output from Mapper and Reducer in the second step. Note that we have completely dropped userID in this step, as we do not require this piece of information any further. It was necessary only to group items rated by the same user together.
 
@@ -82,7 +82,7 @@ A critical design element of implementing collaborative filtering is the choice 
 The third step involves sorting and filtering, as illustrated in Figure 5, to generate a meaningfully sorted output as well as to prepare for effective information retrieval. Since a recommendation system typically deals with an enormous number of items, we want to decrease the density of the similarity matrix generated in Step 2 (Schelter et al., 2012). To do this we get rid of pairs with near-zero similarity by specifying a similarity threshold and size constraint to prune lower scoring item pairs. This threshold is best determined experimentally to avoid negative effects in prediction quality, as it depends on the particular data at hand. 
 
 ![]({{site.baseurl}}/assets/mr_step3)
-#### Figure 5 Output of Map and Reduce jobs of Step 3
+##### Figure 5 Output of Map and Reduce jobs of Step 3
 
 In our final step, we retain only a fraction of most similar items for recommendation purposes, as this approach has shown to be sufficient for good item-based prediction quality (Schelter et al., 2012). To derive recommendations for each item, the ranking among the item pairs (item1, item2) needs to be computed. For each item pair (item1, item2) a ranking is computed based on the descending order of similarity value of item x with the rest of the items. This process is repeated for all item pairs. From the pool of similar items for any particular item x, an arbitrarily chosen number of top N items are then selected and provided as the recommendation to the user (Somani, 2015). We also add the ability to specify the particular item x we want to see the output for.
 
@@ -241,7 +241,7 @@ The output from the Recommendation job emitting the top 10 most similar products
 The most data intensive part of this job is the second step: as shown in Figure 6, Step 2 dominates the total execution time of steps, taking 5 minutes, compared to Steps 1, 3, and 4 taking 2, 1, and 1 and minute(s), respectively. This gives an indication of where to focus possible improvements of the program design to reduce the amount of data written to the HDFS. One possibility is the specification of a combiner function between mapper and reducer in Step 2 to aggregate the output by key before writing to the HDFS. This would reduce the amount of data passed through the shuffle phase as a result of the combinations computation in the mapper. 
  
 ![]({{site.baseurl}}/assets/runtime_ps.png)
-#### Figure 6 Runtime per step
+##### Figure 6 Runtime per step
 
 The information on runtime of map and reduce tasks also gives an idea of how many more machines to dedicate to running the job to reduce run time. Of course this project deals with only a very small dataset just for demonstration purposes, but when dealing with massive datasets using large-scale data storage and processing infrastructures, as is often the case in modern organizations, this issue becomes a real concern.
 
