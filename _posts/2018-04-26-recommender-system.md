@@ -222,14 +222,14 @@ self.add_passthrough_option('--itemID', help=('specify itemID of interest'))
 self.add_passthrough_option('--topN', type = int, help=('Number of top entries to filter'))
 ```
 
-## Results and Analysis
+## Results and Analysis
 
 ### Recommendation job
 The output from the Recommendation job emitting the top 10 most similar products, in ascending order, for the item ID 'B00003TL7P', as specified in the command line, are as follows: 
 
-"ITEM ID" | ["ITEM ID", SIMILARITY SCORE, NUMBER OF CO-RATINGS]
---- | ---
-"B00003TL7P" | ["B00005BYUR", 0.9715450958589567, 14]
+"ITEM ID"|["ITEM ID", SIMILARITY SCORE, NUMBER OF CO-RATINGS]
+---|---
+"B00003TL7P"|["B00005BYUR", 0.9715450958589567, 14]
 "B00003TL7P" | ["B0000DEW8N", 0.9719810695253235, 18]
 "B00003TL7P" | ["B00006G963", 0.9727989913506497, 12]
 "B00003TL7P" | ["B000067EH7", 0.9790109038932515, 65]
