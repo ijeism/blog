@@ -77,8 +77,33 @@ The fact that a program can be executed and tested without having Hadoop install
 ### Multiple-Step MapReduce Job
 We begin by defining multiple steps in order to execute more than one Map-Reduce step in one job. The class mrjob.step.MRStep (see Source Code) represents steps - and the sequence in which they are to be run - handled by the script containing our job (Yelp and Contributors, 2016). With the code below, we determine that our MapReduce job contains three steps divided into a map and a reduce job each, with an additional fourth step consisting of one reducer only. As we will see, this final step enables us produce an arbitrary number of filtered recommendations for specified items. 
 
+```html
+def steps(self):
+	return [
+		MRStep(mapper=self.mapper,
+			reducer=self.reducer),
+		MRStep(mapper=self.mapper2,
+			reducer=self.reducer2),
+		MRStep(mapper=self.mapper3,
+			reducer=self.reducer3),
+		MRStep(reducer=self.reducer4)]
+
+```
+
 ### Step 1: Inverted Index Creation
 The first step involves parsing the input data to extract user IDs and their associated (item, rating) pairs in the mapper; and grouping these (item, rating) pairs by user ID in the reducer. The output from this step is a list of individual user IDs and all (item, rating) pairs associated with each user individually.
+
+```html
+def mapper(self, _, line):
+	(userID, itemID, rating, timestamp) = line.split(',')
+	yield userID, (itemID, float(rating))
+
+def reducer(self, userID, value):
+	itemratings = []
+	for itemID, rating in value:
+		itemratings.append((itemID, rating))
+	yield userID, itemratings
+```
 
 ### Step 2: Similarity Computation and Pruning
 The Mapper of the second step finds every pair of items each user has rated and outputs each pair with its associated ratings. As mentioned earlier, we drop userID entirely; instead we output the pair of items as the key and the associated pair of ratings as the value. In order to find every possible pair of items, we utilize the Python function 'combinations', which generates a sequence of all possible k-tuples of elements in an iterable, ignoring order (McKinney, 2013). In our case, this function produces every possible pair from the list of (item, rating) pairs for a particular user. This means that if user1 had (item, rating) pairs (i17, 5) (i19, 1) and (i20, 4), the combinations function would generate a sequence of the following combinations: [(i17,5),(i19,1); (i17,5)(i20,4);(i19,1),(i20,4)]. These are represented by v1, v2 in our code. 
@@ -87,15 +112,57 @@ In order to yield individual item pairs with associated rating pairs, we then ex
 
 Note that we produce item pairs and associated rating pairs bi-directionally, yielding information for pairs (item1,i, item2,i) as well as (item2,i, item1,i), e.g. (i19,i17), (5,1) and (i17,i19), (5,1). This is to ensure a complete list of item IDs for effective subsequent information retrieval. 
 
-Next, a function cosine_similarity is defined for calculating the cosine similarity metric - discussed in Section 3 - which is used in the Reducer. The Reducer is responsible for computing the similarity score between the ratings vectors for each item pair rated by multiple users. Put differently, it calculates the similarity of each unique pair of items across all users who rated both item1 and item2. It does so by invoking the previously defined cosine_similarity function, using (item, rating) pairs as the argument and specifying the desired number of elements of combinations as 2. 
+Next, a function ```html cosine_similarity``` is defined for calculating the cosine similarity metric - discussed in Section 3 - which is used in the Reducer. The Reducer is responsible for computing the similarity score between the ratings vectors for each item pair rated by multiple users. Put differently, it calculates the similarity of each unique pair of items across all users who rated both item1 and item2. It does so by invoking the previously defined ```html cosine_similarity``` function, using (item, rating) pairs as the argument and specifying the desired number of elements of combinations as 2. 
 
 As discussed earlier, we choose to specify a similarity threshold - retaining only pairs with a similarity score above 0.95 - and size constraint - retaining only pairs with at least 10 co-ratings - to remove lower scoring item pairs. The output consists of the pair of items as the key and the associated similarity with number of mutual ratings as the value. Similarities are normalized to [0,1] scale.
 
+```html
+def mapper2(self, userID, itemratings):
+	c = combinations(itemratings, 2)
+	for v1, v2 in c:
+		yield (v1[0], v2[0]), (v1[1], v2[1])
+		yield (v2[0], v1[0]), (v2[1], v1[1])
 
+
+def cosine_similarity(self, ratingsPair):
+	countPair = 0
+	sumxy = sumxx = sumyy = 0
+	score = 0
+	for x, y in ratingsPair:
+		sumxy += x * y
+		sumxx += x * x
+		sumyy += y * y
+		countPair += 1
+	denominator = sqrt(sumxx) * sqrt(sumyy)
+	numerator = sumxy
+	if (denominator):
+		score = (numerator / (float(denominator)))
+	return (score, countPair)
+
+
+def reducer2(self, itemPair, value):
+	score, countPair = self.cosine_similarity(value)
+	if (countPair > 10 and score > 0.95):
+		yield itemPair, (score, countPair)
+```
 
 
 ### Step 3: Sorting 
-The third step of the job serves as a way to rearrange the data elements to ensure a meaningfully sorted output, which is useful for further processing.  To this end, the Mapper emits (item1, score) as a key to sort by itemID, and the Reducer emits an empty key and the (score, item1, item2, n) tuple as a value to prepare for sorting and filtering in the final step. Note that score is positioned as the first element of the tuple. This is to enable us sort and filter by score in the final step.  
+The third step of the job serves as a way to rearrange the data elements to ensure a meaningfully sorted output, which is useful for further processing.  To this end, the Mapper emits (item1, score) as a key to sort by itemID, and the Reducer emits an empty key and the (score, item1, item2, n) tuple as a value to prepare for sorting and filtering in the final step. Note that score is positioned as the first element of the tuple. This is to enable us sort and filter by score in the final step. 
+
+```html
+def mapper3(self, itemPair, value):
+	item1, item2 = itemPair
+	score, n = value
+	yield (item1, score), (item2, n)
+
+
+def reducer3(self, key, value):
+	item1, score = keys
+	for item2, n in value:
+		yield None, (score, item1, item2, n)
+
+```
 
 ### Step 4: Filtering for Recommendation
 The last part of the implementation is to derive recommendations for items based on the similarity score of the item pairs. This final step consists of only one reduce job. It is responsible for producing recommendations for a user related to a particular item in the form of a specified number of items that are top ranking based on their similarity score relative to that specific item. To achieve this, we construct a filter allowing us to specify records that contain a specific number (in our case the desired number of most similar products) or a string of text (in our case the item ID). One way to achieve this in Python is to: 
@@ -107,14 +174,44 @@ iv.	slice the list to select only the specified number of tuples with highest sc
 
 Since the sort() function automatically sorts in ascending order, negative indices are used to slice the list relative to the end (McKinney, 2013). This allows us to select only the most similar items to recommend in relation to a particular item.
 
+```html
+def reducer4(self, key, value):
+	lis = []
+	for score, item1, item2, n in value:
+		if item1 == self.options.itemID:
+			lis.append((score, item1, item2, n))
+	lis.sort()
+	top = lis[-self.options.topN:]
+	for score, item1, item2, n in top:
+		yield item1, (item2, score, n)
 
-In order to be able to specify - in addition to input and output directories - the desired item ID and number of top similar items in the command line, we define configuration options at the beginning of the Source Code. These allow us to pass the specific item ID and number of top similar items specified as additional arguments --itemID and --topN in the command line through to the program (self.options.itemID and  self.options.topN,  respectively) as it is run.
+```
 
+In order to be able to specify - in addition to input and output directories - the desired item ID and number of top similar items in the command line, we define configuration options at the beginning of the Source Code. These allow us to pass the specific item ID and number of top similar items specified as additional arguments --itemID and --topN in the command line through to the program (```html self.options.itemID``` and  ```html self.options.topN```,  respectively) as it is run.
+
+```html
+def configure_options(self):
+super(ProductSimilarities, self).configure_options()
+self.add_passthrough_option('--itemID', help=('specify itemID of interest'))
+self.add_passthrough_option('--topN', type = int, help=('Number of top entries to filter'))
+```
 
 ## Results and Analysis
 
 ### Recommendation job
 The output from the Recommendation job emitting the top 10 most similar products, in ascending order, for the item ID 'B00003TL7P', as specified in the command line, are as follows: 
+
+"ITEM ID" | ["ITEM ID", SIMILARITY SCORE, NUMBER OF CO-RATINGS]
+--- | ---
+"B00003TL7P" | ["B00005BYUR", 0.9715450958589567, 14]
+"B00003TL7P" | ["B0000DEW8N", 0.9719810695253235, 18]
+"B00003TL7P" | ["B00006G963", 0.9727989913506497, 12]
+"B00003TL7P" | ["B000067EH7", 0.9790109038932515, 65]
+"B00003TL7P" | ["B0006FHFYS", 0.9815308005362453, 42]
+"B00003TL7P" | ["B0000936LR", 0.9829371361047635, 12]
+"B00003TL7P" | ["B00005C6OI", 0.9848737185901497, 12]
+"B00003TL7P" | ["B00065H55W", 0.9875106606839943, 12]
+
 
 
 The most data intensive part of this job is the second step: as shown in Figure 6, Step 2 dominates the total execution time of steps, taking 5 minutes, compared to Steps 1, 3, and 4 taking 2, 1, and 1 and minute(s), respectively. This gives an indication of where to focus possible improvements of the program design to reduce the amount of data written to the HDFS. One possibility is the specification of a combiner function between mapper and reducer in Step 2 to aggregate the output by key before writing to the HDFS. This would reduce the amount of data passed through the shuffle phase as a result of the combinations computation in the mapper. 
@@ -125,7 +222,40 @@ The information on runtime of map and reduce tasks also gives an idea of how man
 
 ### Product Similarities job
 For comparison purposes, we also run just the first three steps of the MapReduce job in order to generate the entire list of items with their respective list of similar products. Runtimes for steps 1-3 are similar to the ones reported for the Recommendation job. The following is an excerpt of the first couple of rows of output from this MapReduce job:
- 
+
+"ITEM ID"|["ITEM ID", SIMILARITY SCORE, NUMBER OF CO-RATINGS]
+--|---
+"B00003TL7P"|["B0002N3OMG", 0.9507868781289148, 14]
+"B00003TL7P"|["B00005BTB1", 0.9541089219908963, 12]
+"B00003TL7P"|["B000056OV0", 0.9555225962625125, 31]
+"B00003TL7P"|["B00009P7I5", 0.9580170197702604, 14]
+"B00003TL7P"|["B000056HNZ", 0.9585245325202532, 14]
+"B00003TL7P"|["B000059XOD", 0.9649060784569715, 30]
+"B00003TL7P"|["B0001IU5HY", 0.9654727361161941, 29]
+"B00003TL7P"|["B000056J9F", 0.9658472446812929, 12]
+"B00003TL7P"|["B00005JIVI", 0.9682728956857302, 16]
+"B00003TL7P"|["B0002ZOI9W", 0.9696611877713683, 14]
+"B00003TL7P"|["B000S35QLC", 0.9702820941895154, 30]
+"B00003TL7P"|["B000324Y7U", 0.971042963758939, 33]
+"B00003TL7P"|["B00005BYUR", 0.9715450958589567, 14]
+"B00003TL7P"|["B0000DEW8N", 0.9719810695253235, 18]
+"B00003TL7P"|["B00006G963", 0.9727989913506497, 12]
+"B00003TL7P"|["B000067EH7", 0.9790109038932515, 65]
+"B00003TL7P"|["B0006FHFYS", 0.9815308005362453, 42]
+"B00003TL7P"|["B0000936LR", 0.9829371361047635, 12]
+"B00003TL7P"|["B00005C6OI", 0.9848737185901497, 12]
+"B00003TL7P"|["B00065H55W", 0.9875106606839943, 12]
+"B00003TL7P"|["B000056OUH", 0.9887809514275694, 42]
+"B00003TL7P"|["B0000936M4", 0.9928268682883957, 11]
+"B00004TFLB"|["B000YDDF6O", 0.9602217969019541, 27]
+"B00004TFLB"|["B000BNQC58", 0.9604664985878935, 12]
+"B00004TFLB"|["B001UF8BL4", 0.9876590252123215, 15]
+"B000056C86"|["B000IDSLOG", 0.9517713799167301, 14]
+"B000056C86"|["B000YDDF6O", 0.9927945535915402, 13]
+"B000056HNX"|["B000056OUF", 0.96715211568869, 23]
+"B000056HNX"|["B000056OUH", 0.9713586960611499, 38]
+"B000056HNX"|["B0000AY9XY", 0.997040538050167, 12]
+...
 
 
 Note that this job was run on one machine only, which is why we obtain a nicely sorted output. When running the job on multiple machines using multiple reducers, however, the results will be only partially sorted. In this case we would find an ordered set of records for the item ID "B0003TL7P", for instance, at the beginning of the list as well as further down - in several groupings, depending on the number of machines the job was distributed to. This is because the reducers performing the sorting exercise run on various machines, each emitting an individually sorted output. One way of tackling this issue is by using a partitioner that respects the order of the output, making sure partition sizes are chosen to be fairly even so that job times are not dominated by a single reducer (White, 2015).
@@ -142,15 +272,7 @@ The collaborative filtering technique itself, however, is useful, particularly -
 
 
 
-```html
-<html>
-  <head>
-  </head>
-  <body>
-    <p>Hello, World!</p>
-  </body>
-</html>
-```
+
 
 
 
