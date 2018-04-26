@@ -81,7 +81,7 @@ A critical design element of implementing collaborative filtering is the choice 
 
 The third step involves sorting and filtering, as illustrated in Figure 5, to generate a meaningfully sorted output as well as to prepare for effective information retrieval. Since a recommendation system typically deals with an enormous number of items, we want to decrease the density of the similarity matrix generated in Step 2 (Schelter et al., 2012). To do this we get rid of pairs with near-zero similarity by specifying a similarity threshold and size constraint to prune lower scoring item pairs. This threshold is best determined experimentally to avoid negative effects in prediction quality, as it depends on the particular data at hand. 
 
-![]({{site.baseurl}}/assets/mr_step3)
+![]({{site.baseurl}}/assets/mr_step3.png)
 ##### Figure 5 Output of Map and Reduce jobs of Step 3
 
 In our final step, we retain only a fraction of most similar items for recommendation purposes, as this approach has shown to be sufficient for good item-based prediction quality (Schelter et al., 2012). To derive recommendations for each item, the ranking among the item pairs (item1, item2) needs to be computed. For each item pair (item1, item2) a ranking is computed based on the descending order of similarity value of item x with the rest of the items. This process is repeated for all item pairs. From the pool of similar items for any particular item x, an arbitrarily chosen number of top N items are then selected and provided as the recommendation to the user (Somani, 2015). We also add the ability to specify the particular item x we want to see the output for.
