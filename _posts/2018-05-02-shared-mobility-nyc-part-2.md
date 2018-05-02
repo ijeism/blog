@@ -46,6 +46,48 @@ Notice, again, that maximum pickup counts for Taxi and Uber seem to be highest w
 
 Figure 2 Demand by hour (weekday vs. weekend)
 
+R code:
+{% highlight r %}
+# scatterplot of count versus hour, with color scale based on temp
+pl1 <- ggplot(filter(ny, wknd == 0), aes(hour, combined)) 
+pl1 <- pl1 + geom_point(position = position_jitter(w = 1, h = 0), aes(color = mean_temp), alpha = 0.5)
+#pl1 <- pl1 + scale_color_gradientn(colours = c('dark blue','blue','light blue','light green','yellow','orange','red'))
+pl1 <- pl1 + scale_color_continuous(low = '#00A8C5', high='#FFFF7E')
+pl1 + theme_minimal()
+
+pl2 <- ggplot(filter(ny, wknd == 0), aes(hour, uber)) 
+pl2 <- pl2 + geom_point(position = position_jitter(w = 1, h = 0), aes(color = mean_temp), alpha = 0.5)
+#pl2 <- pl2 + scale_color_gradientn(colours = c('dark blue','blue','light blue','light green','yellow','orange','red'))
+pl2 <- pl2 + scale_color_continuous(low = '#00A8C5', high='#FFFF7E')
+pl2 + theme_minimal()
+
+pl3 <- ggplot(filter(ny, wknd == 0), aes(hour, bike)) 
+pl3 <- pl3 + geom_point(position = position_jitter(w = 1, h = 0), aes(color = mean_temp), alpha = 0.5)
+#pl3 <- pl3 + scale_color_gradientn(colours = c('dark blue','blue','light blue','light green','yellow','orange','red'))
+pl3 <- pl3 + scale_color_continuous(low = '#00A8C5', high='#FFFF7E') 
+pl3 + theme_minimal()
+
+pl4 <- ggplot(filter(ny, wknd == 1), aes(hour, combined)) 
+pl4 <- pl4 + geom_point(position = position_jitter(w = 1, h = 0), aes(color = mean_temp), alpha = 0.5)
+#pl4 <- pl4 + scale_color_gradientn(colours = c('dark blue','blue','light blue','light green','yellow','orange','red'))
+pl4 <- pl4 + scale_color_continuous(low = '#00A8C5', high='#FFFF7E')
+pl4 + theme_minimal()
+
+pl5 <- ggplot(filter(ny, wknd == 1), aes(hour, uber)) 
+pl5 <- pl5 + geom_point(position = position_jitter(w = 1, h = 0), aes(color = mean_temp), alpha = 0.5)
+#pl5 <- pl5 + scale_color_gradientn(colours = c('dark blue','blue','light blue','light green','yellow','orange','red'))
+pl5 <- pl5 + scale_color_continuous(low = '#00A8C5', high='#FFFF7E')
+pl5 + theme_minimal()
+
+pl6 <- ggplot(filter(ny, wknd == 1), aes(hour, bike)) 
+pl6 <- pl6 + geom_point(position = position_jitter(w = 1, h = 0), aes(color = mean_temp), alpha = 0.5)
+#pl6 <- pl6 + scale_color_gradientn(colours = c('dark blue','blue','light blue','light green','yellow','orange','red'))
+pl6 <- pl6 + scale_color_continuous(low = '#00A8C5', high='#FFFF7E')
+pl6 + theme_minimal()
+
+grid.arrange(pl1, pl2, pl3, pl4, pl5, pl6, ncol = 3, top = 'No of Pickups vs Hour\nWeekday', bottom = 'Weekend')
+{% endhighlight %}
+
 On the other hand, pickup activity on non-working days (second row) follow a different pattern. Pickups for Taxi and Uber in particular are high during the very early morning hours (perhaps when people return home from a night out) and have another peak in the afternoon hours, with a slightly different distribution. Again, highest count tends to occur on days with low mean temperatures. Bike activity also shows a steady rise and fall during the afternoon hours, although to a much lesser extent on cooler days; somewhat increased activity equally occurs during early morning hours (from around midnight till 3-4 am).
 
 
@@ -64,3 +106,5 @@ Figure 4 illustrates the relationship between pickups and amount of rainfall and
 ![Picture1.png]({{site.baseurl}}/assets/Picture4.png) 
 
 Figure 4 Demand by rainfall (number of pickups vs. precipitation, by mean temperature)
+
+R code for all visualizations can be found at XXX.
