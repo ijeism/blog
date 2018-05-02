@@ -6,13 +6,12 @@ author: I ON
 ---
 # Predicting NYC Shared Mobility - Exploratory Data Analysis
 
-Following data pre-processing, we conduct exploratory data analysis in R. 
+Following data pre-processing in Part 1 of this series, we conduct exploratory data analysis using R. 
 
 ## Cyclical trends of demand
 
 Figure 1 depicts the cyclical trend of pickups throughout a week. Taxi, Uber, and Bike follow a similar cyclical trend in the sense that activity is high on weekdays and comparatively low on weekends. Activity for both taxi and Uber seems to peak on Wednesdays, while bike activity remains relatively stable across weekdays. On weekends, bike demand seems higher on Sundays, while Sundays show the lowest pickup activity for Taxi and Uber. Notice also how activity for Uber and Taxi tends to be highest on days with low temperatures, while this observation is not as clear from the bike graph.
 
-Figure 1 depicts the cyclical trend of pickups throughout a week. Taxi, Uber, and Bike follow a similar cyclical trend in the sense that activity is high on weekdays and comparatively low on weekends. Activity for both taxi and Uber seems to peak on Wednesdays, while bike activity remains relatively stable across weekdays. On weekends, bike demand seems higher on Sundays, while Sundays show the lowest pickup activity for Taxi and Uber. Notice also how activity for Uber and Taxi tends to be highest on days with low temperatures, while this observation is not as clear from the bike graph.
 
  
 Figure 1 Demand by weekday
