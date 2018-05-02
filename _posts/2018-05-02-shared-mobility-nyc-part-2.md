@@ -41,6 +41,8 @@ Figure 2 shows that on working days (first row), peak activity typically occurs 
 
 Notice, again, that maximum pickup counts for Taxi and Uber seem to be highest when mean temperatures are lowest, while pickup activity on days with lower temperature tends to be lower for the Bike. This makes sense, since bike users are more exposed to weather conditions than car users.
 
+On the other hand, pickup activity on non-working days (second row) follow a different pattern. Pickups for Taxi and Uber in particular are high during the very early morning hours (perhaps when people return home from a night out) and have another peak in the afternoon hours, with a slightly different distribution. Again, highest count tends to occur on days with low mean temperatures. Bike activity also shows a steady rise and fall during the afternoon hours, although to a much lesser extent on cooler days; somewhat increased activity equally occurs during early morning hours (from around midnight till 3-4 am).
+
 
 ![Picture1.png]({{site.baseurl}}/assets/Picture2.png)
 
@@ -87,8 +89,6 @@ pl6 + theme_minimal()
 
 grid.arrange(pl1, pl2, pl3, pl4, pl5, pl6, ncol = 3, top = 'No of Pickups vs Hour\nWeekday', bottom = 'Weekend')
 {% endhighlight %}
-
-On the other hand, pickup activity on non-working days (second row) follow a different pattern. Pickups for Taxi and Uber in particular are high during the very early morning hours (perhaps when people return home from a night out) and have another peak in the afternoon hours, with a slightly different distribution. Again, highest count tends to occur on days with low mean temperatures. Bike activity also shows a steady rise and fall during the afternoon hours, although to a much lesser extent on cooler days; somewhat increased activity equally occurs during early morning hours (from around midnight till 3-4 am).
 
 
 ## Location
