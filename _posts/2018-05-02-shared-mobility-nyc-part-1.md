@@ -99,4 +99,4 @@ precip_sum|Total daily precipitation by day|Numeric
 
 
 
-Data Exploration follow in Part 2.
+Data Exploration follows in Part 2.
