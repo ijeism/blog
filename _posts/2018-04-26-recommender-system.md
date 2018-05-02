@@ -119,7 +119,7 @@ def steps(self):
 ### Step 1: Inverted Index Creation
 The first step involves parsing the input data to extract user IDs and their associated (item, rating) pairs in the mapper; and grouping these (item, rating) pairs by user ID in the reducer. The output from this step is a list of individual user IDs and all (item, rating) pairs associated with each user individually.
 
-```html
+{% highlight python %}
 def mapper(self, _, line):
 	(userID, itemID, rating, timestamp) = line.split(',')
 	yield userID, (itemID, float(rating))
@@ -129,7 +129,7 @@ def reducer(self, userID, value):
 	for itemID, rating in value:
 		itemratings.append((itemID, rating))
 	yield userID, itemratings
-```
+{% endhighlight %}
 
 ### Step 2: Similarity Computation and Pruning
 The Mapper of the second step finds every pair of items each user has rated and outputs each pair with its associated ratings. As mentioned earlier, we drop userID entirely; instead we output the pair of items as the key and the associated pair of ratings as the value. In order to find every possible pair of items, we utilize the Python function 'combinations', which generates a sequence of all possible k-tuples of elements in an iterable, ignoring order (McKinney, 2013). In our case, this function produces every possible pair from the list of (item, rating) pairs for a particular user. This means that if user1 had (item, rating) pairs (i17, 5) (i19, 1) and (i20, 4), the combinations function would generate a sequence of the following combinations: [(i17,5),(i19,1); (i17,5)(i20,4);(i19,1),(i20,4)]. These are represented by v1, v2 in our code. 
@@ -142,7 +142,7 @@ Next, a function ```cosine_similarity``` is defined for calculating the cosine s
 
 As discussed earlier, we choose to specify a similarity threshold - retaining only pairs with a similarity score above 0.95 - and size constraint - retaining only pairs with at least 10 co-ratings - to remove lower scoring item pairs. The output consists of the pair of items as the key and the associated similarity with number of mutual ratings as the value. Similarities are normalized to [0,1] scale.
 
-```html
+{% highlight python %}
 def mapper2(self, userID, itemratings):
 	c = combinations(itemratings, 2)
 	for v1, v2 in c:
@@ -170,13 +170,13 @@ def reducer2(self, itemPair, value):
 	score, countPair = self.cosine_similarity(value)
 	if (countPair > 10 and score > 0.95):
 		yield itemPair, (score, countPair)
-```
+{% endhighlight %}
 
 
 ### Step 3: Sorting 
 The third step of the job serves as a way to rearrange the data elements to ensure a meaningfully sorted output, which is useful for further processing.  To this end, the Mapper emits (item1, score) as a key to sort by itemID, and the Reducer emits an empty key and the (score, item1, item2, n) tuple as a value to prepare for sorting and filtering in the final step. Note that score is positioned as the first element of the tuple. This is to enable us sort and filter by score in the final step. 
 
-```html
+{% highlight python %}
 def mapper3(self, itemPair, value):
 	item1, item2 = itemPair
 	score, n = value
@@ -187,8 +187,7 @@ def reducer3(self, key, value):
 	item1, score = keys
 	for item2, n in value:
 		yield None, (score, item1, item2, n)
-
-```
+{% endhighlight %}
 
 ### Step 4: Filtering for Recommendation
 The last part of the implementation is to derive recommendations for items based on the similarity score of the item pairs. This final step consists of only one reduce job. It is responsible for producing recommendations for a user related to a particular item in the form of a specified number of items that are top ranking based on their similarity score relative to that specific item. To achieve this, we construct a filter allowing us to specify records that contain a specific number (in our case the desired number of most similar products) or a string of text (in our case the item ID). One way to achieve this in Python is to: 
@@ -215,12 +214,12 @@ def reducer4(self, key, value):
 
 In order to be able to specify - in addition to input and output directories - the desired item ID and number of top similar items in the command line, we define configuration options at the beginning of the Source Code. These allow us to pass the specific item ID and number of top similar items specified as additional arguments --itemID and --topN in the command line through to the program (```html self.options.itemID``` and  ```html self.options.topN```,  respectively) as it is run.
 
-```html
+{% highlight python %}
 def configure_options(self):
 super(ProductSimilarities, self).configure_options()
 self.add_passthrough_option('--itemID', help=('specify itemID of interest'))
 self.add_passthrough_option('--topN', type = int, help=('Number of top entries to filter'))
-```
+{% endhighlight %}
 
 ## Results and Analysis
 
