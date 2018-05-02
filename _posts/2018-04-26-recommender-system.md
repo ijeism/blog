@@ -103,7 +103,7 @@ The fact that a program can be executed and tested without having Hadoop install
 ### Multiple-Step MapReduce Job
 We begin by defining multiple steps in order to execute more than one Map-Reduce step in one job. The class mrjob.step.MRStep (see Source Code) represents steps - and the sequence in which they are to be run - handled by the script containing our job (Yelp and Contributors, 2016). With the code below, we determine that our MapReduce job contains three steps divided into a map and a reduce job each, with an additional fourth step consisting of one reducer only. As we will see, this final step enables us produce an arbitrary number of filtered recommendations for specified items. 
 
-```html
+{% highlight python %}
 def steps(self):
 	return [
 		MRStep(mapper=self.mapper,
@@ -114,7 +114,7 @@ def steps(self):
 			reducer=self.reducer3),
 		MRStep(reducer=self.reducer4)]
 
-```
+{% endhighlight %}
 
 ### Step 1: Inverted Index Creation
 The first step involves parsing the input data to extract user IDs and their associated (item, rating) pairs in the mapper; and grouping these (item, rating) pairs by user ID in the reducer. The output from this step is a list of individual user IDs and all (item, rating) pairs associated with each user individually.
@@ -200,7 +200,7 @@ iv.	slice the list to select only the specified number of tuples with highest sc
 
 Since the sort() function automatically sorts in ascending order, negative indices are used to slice the list relative to the end (McKinney, 2013). This allows us to select only the most similar items to recommend in relation to a particular item.
 
-```html
+{% highlight python %}
 def reducer4(self, key, value):
 	lis = []
 	for score, item1, item2, n in value:
@@ -211,7 +211,7 @@ def reducer4(self, key, value):
 	for score, item1, item2, n in top:
 		yield item1, (item2, score, n)
 
-```
+{% endhighlight %}
 
 In order to be able to specify - in addition to input and output directories - the desired item ID and number of top similar items in the command line, we define configuration options at the beginning of the Source Code. These allow us to pass the specific item ID and number of top similar items specified as additional arguments --itemID and --topN in the command line through to the program (```html self.options.itemID``` and  ```html self.options.topN```,  respectively) as it is run.
 
