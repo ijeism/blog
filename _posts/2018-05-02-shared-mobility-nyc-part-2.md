@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 layout: post
 categories: machine learning; EDA
 author: I ON
@@ -12,6 +12,24 @@ Following data pre-processing in Part 1 of this series, we conduct exploratory d
 
 Figure 1 depicts the cyclical trend of pickups throughout a week. Taxi, Uber, and Bike follow a similar cyclical trend in the sense that activity is high on weekdays and comparatively low on weekends. Activity for both taxi and Uber seems to peak on Wednesdays, while bike activity remains relatively stable across weekdays. On weekends, bike demand seems higher on Sundays, while Sundays show the lowest pickup activity for Taxi and Uber. Notice also how activity for Uber and Taxi tends to be highest on days with low temperatures, while this observation is not as clear from the bike graph.
 
+{% highlight r %}
+# scatterplot of count versus weekday, with color scale based on temp
+p1_ <- ggplot(ny, aes(wday, combined)) + geom_point(aes(color = mean_temp), alpha = 0.5) + 
+  scale_color_continuous(low = '#00A8C5', high='#FFFF7E') +
+  theme_minimal()
+p2_ <- ggplot(ny, aes(wday, taxi)) + geom_point(aes(color = mean_temp), alpha = 0.5) + 
+  scale_color_continuous(low = '#00A8C5', high='#FFFF7E') +
+  theme_minimal()
+p3_ <- ggplot(ny, aes(wday, uber)) + geom_point(aes(color = mean_temp), alpha = 0.5) + 
+  scale_color_continuous(low = '#00A8C5', high='#FFFF7E') +
+  ylim(0, 2000) +
+  theme_minimal()
+p4_ <- ggplot(ny, aes(wday, bike)) + geom_point(aes(color = mean_temp), alpha = 0.5) + 
+  scale_color_continuous(low = '#00A8C5', high='#FFFF7E') +
+  theme_minimal()
+grid.arrange(p1_, p2_, p3_, p4_, ncol = 2, top = 'No of Pickups vs Weekday (by mean temperature)')
+{% endhighlight %}
+ 
 
 ![Picture1.png]({{site.baseurl}}/_posts/assets/Picture1.png)
  
