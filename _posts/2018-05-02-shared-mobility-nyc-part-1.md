@@ -50,15 +50,8 @@ import pprint
 # read earlier specified input filename  
 locs = [(row[0], row[1]) for row in csv.reader(open(input_filename, 'rt'), delimiter = ',')]
 
-# print out first 6 rows of csv file
-pp = pprint.PrettyPrinter(indent = 4)
-pp.pprint(locs[0:5])
-
 # generate geolocations for lat/long coordinates in csv file
 results = rg.search(locs)
-
-# print some results
-pp.pprint(results[0:2])
 
 # match results to long/lat coordinates in csv file 
 rows = []
@@ -77,18 +70,6 @@ csvwriter.writerows(rows)
 Additionally, in order to be able to differentiate between types of trips taken, we break down the total number of trips by location and create four further variables n.yellow, n.green, n.uber, and n.bike that take on the number of trips taken in a location by yellow cab, green cab, Uber, and Citi Bike, respectively. 
 
 Note that we are also using circular variables i.e. day of the month, day of the week, and hour of the day. These are variables that indicate cyclical time and are characterized by the fact that the beginning and the end of their scales meet. Most familiar statistics don’t work well with circular variables since they assume linearity, i.e. the lowest value being farthest from the highest value. For example, hours of a day, split into 24 bins (0 - 23), represent the daily cycle; 0, in this case, is much closer to 22 than to, say, 5. We tackle this issue by using cosine and sine functions  to place our circular variables into a standardized Cartesian space. This essentially makes it easier for the model to find relevant patterns (The Analysis Factor, n.d.). This creates 6 new variables: hour.num, hour.cos, hour.sin, wday.num, wday.cos, wday.sin.
-
-{% highlight python %}
-df$hour.num <- 2*pi*(df$hour+0.5)/24
-df$wday.num <- 2*pi*(as.numeric(df$wday)+0.5)/24
-
-df$hour.cos <- cos(df$hour.num)
-df$hour.sin <- sin(df$hour.num)
-
-df$wday.cos <- cos(df$wday.num)
-df$wday.sin <- sin(df$wday.num)
-{% endhighlight %}
-
 
 Table 1 shows the metadata of our final dataset for analysis:
 
