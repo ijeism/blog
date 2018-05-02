@@ -107,4 +107,4 @@ Figure 4 illustrates the relationship between pickups and amount of rainfall and
 
 Figure 4 Demand by rainfall (number of pickups vs. precipitation, by mean temperature)
 
-R code for all visualizations can be found at XXX.
+Full code can be found at XXX.
