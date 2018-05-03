@@ -48,6 +48,7 @@ Note that we are also using circular variables i.e. day of the month, day of the
 
 Table 1 shows the metadata of our final dataset for analysis:
 
+
 Variable Code|Description|Level
 ------|-------|-------
 month|Month| Categorical
@@ -70,6 +71,7 @@ wday.sin|sin(wday.num)|Numeric
 wknd|Weekend|Binary
 mean_temp|Average temperature by day|Numeric
 precip_sum|Total daily precipitation by day|Numeric
+
 #### Table 1 Metadata table
 
 
