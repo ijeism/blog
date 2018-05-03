@@ -11,11 +11,11 @@ People need to move around to secure basic human needs. Mobility is more than a 
 
 For interested parties, such as taxi companies, urban mobility planners, entrepreneurs, or public transit authorities to be able to make smart decisions in providing improved mobility solutions, they require accurate information about the distribution of demand for shared mobility across space and time. In addition, they need to be able to predict the number of people that want to move from one location to another using some means of shared transportation, given a time, day, and location.
 
-Inspired by (Gong et al., 2016), the proposal for this project was therefore to develop a data driven application that will enable all these parties to evaluate the demand for shared mobility for a given location, date and time to enable them make informed decisions. In a 3-part series, we'll go through the analytics bit of the proposed solution.
+The proposal for this uni project was therefore to develop a data driven application that will enable all these parties to evaluate the demand for shared mobility for a given location, date and time to enable them make informed decisions. In a 3-part series, we'll go through the analytics bit of the proposed solution.
 
 
 ## Data integration and pre-processing
-We use data on the three categories bike-sharing; ride-sourcing; and taxis & limos to gauge demand for shared mobility. We select three months’ worth of data, spanning the period of April 2014 - June 2014.
+Data for the three categories bike-sharing; ride-sourcing; and taxis & limos was used to gauge demand for shared mobility. We select three months’ worth of data, spanning the period of April 2014 - June 2014.
 
 Datasets:
 -	NYC yellow taxi dataset: [http://www.nyc.gov/html/tlc/html/about/trip_record_data.shtml](http://www.nyc.gov/html/tlc/html/about/trip_record_data.shtml)
