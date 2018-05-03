@@ -46,11 +46,11 @@ Finally, we apply a random forest regression model. We choose this model because
 This model gives us by far the highest accuracy amongst the three models, with an RMSE of 0.14 and an R2 of 98%. The best performing Random Forest model uses 50 trees, a maximum depth of a tree of 30, and, as mentioned before, uses out-of-bag samples to estimate the R Squared on unseen data. See Appendix B for an excerpt of the code we used.
 
 
-RMSE	|R-Squared
----	|---
-Linear regression	|0.8806	0.2524	
-k-NN regression	0.3517	|0.8806	
-Random forest regression	|0.1338	0.9829	
+|RMSE	|R-Squared|
+|---	|---|
+|Linear regression	|0.8806	0.2524|	
+|k-NN regression	0.3517	|0.8806|	
+|Random forest regression	|0.1338	0.9829|	
 #### Table 2 Performance table 
 
 To visualize the accuracy of the three models, Figure 5 depicts the correlation between real target values and predicted target values of each model.
