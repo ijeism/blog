@@ -6,7 +6,7 @@ author: I ON
 ---
 # Predicting demand for shared mobility
 
-The question we ask is: for any given time of day, day of the week, and location, how accurately can we predict the demand for shared mobility, i.e. the number of shared mobility trips taken? 
+*The question we ask is: for any given time of day, day of the week, and location, how accurately can we predict the demand for shared mobility, i.e. the number of shared mobility trips taken?* 
 
 ## Problem
 
@@ -76,3 +76,15 @@ Taxi	|0.1296	0.9839
 Uber	|0.1461	0.9510	
 Bike	|0.1589	0.9682	
 #### Table 3 Model performance of random forest regression by type of service
+
+
+## Conclusion
+
+The aim of the project was to develop a data-driven solution to predict the demand for shared mobility services, given selected features from a dataset i.e. the time of the day, day of the week, and location.
+
+We took into consideration the role of five variables (and engineered versions of them) to predict pickup demand: longitude, latitude, hour of day, day of the week, temperature, and precipitation. Different machine learning algorithms were implemented to identify the best performing one in terms of predictive power. 
+
+This algorithm could be fed into an application focused on predicting the number of pickups to allow users to query predicted demand for shared mobility services by time and location. 
+
+The algorithm also helped discover that location is by far the most important factor influencing the number of pickups, followed by time of the day and the day of the week.  
+
