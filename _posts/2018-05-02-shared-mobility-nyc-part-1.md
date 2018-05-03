@@ -49,7 +49,7 @@ Note that we are also using circular variables i.e. day of the month, day of the
 Table 1 shows the metadata of our final dataset for analysis:
 
 Variable Code|Description|Level
----|---|---
+------|-------|-------
 month|Month| Categorical
 day|Day of the month| Categorical
 hour|Hour of the day| Categorical
