@@ -48,6 +48,10 @@ Note that we are also using circular variables i.e. day of the month, day of the
 
 Table 1 shows the metadata of our final dataset for analysis:
 
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
 
 Variable Code|Description|Level
 ------|-------|-------
