@@ -17,8 +17,8 @@ General, updatable, and scalable code for various data extraction processes, suc
 ## Data Sources
 
 Three main data sources used in this dissertation are:
-- the recently published Resistome database - a formidable source for genomic data related to resistance (Winkler et al., 2016); 
-- the Amino Acid Index Database, which contains a large number of context-independent features related to the change in amino acid type (Kawashima & Kanehisa, 2000); 
+- the recently published [Resistome database](https://bitbucket.org/jdwinkler/resistome_release/overview) - a formidable source for genomic data related to resistance; 
+- the [Amino Acid Index Database](http://www.genome.jp/aaindex/), which contains a large number of context-independent features related to the change in amino acid type; 
 - and an R package to predict protein stability by consensus analysis developed by a former student of the MSc Data Science and Analytics program at Brunel University for data on effects of single point mutations in proteins (Nahaul, 2016).
 
 First, data on individual mutations and associated phenotypes are extracted from the Resistome database. Phenotype will be used again at the prediction stage. Mutation data is then used to pull general physiochemical and biochemical properties that characterize individual mutations from the AAindex. Mutation data is further used in a two-step process involving the Uniprot Knowledge Base (UniprotKB) and the Protein Database (PDB) to generate information that enables retrieval of relevant context-specific properties via the R package rprotmut. 
@@ -31,7 +31,7 @@ In this section, basic statistical analysis and visualization techniques will be
 
 ![]({{site.baseurl}}/assets/f9.png)
 
-Figure 9 Bar plot of target variable tolerance phenotype
+#### Figure 9 Bar plot of target variable tolerance phenotype
 
 There are 48 different tolerance phenotypes in the dataset (see Figure 9). To make this information useful for analysis, these are first grouped into two more general classes of phenotypes: one group that is tolerant to antibacterials, and the other that is tolerant to various growth conditions. The goal of this grouping is to see whether it is possible to distinguish mutations that are interesting for medical purposes as opposed to biotechnological use. 
 
@@ -41,7 +41,7 @@ With this classification, 65% of records (10,631) fall into class 1 (antibacteri
 
 ![]({{site.baseurl}}/assets/f10.png)
 
-Figure 10 Box plots of context-specific properties RSA and DDG for antibacterial and growth-condition phenotypes
+#### Figure 10 Box plots of context-specific properties RSA and DDG for antibacterial and growth-condition phenotypes
 Antibiotics=1 for antibacterial resistance; antibiotics=2 for growth-resistance.
 
 
@@ -49,11 +49,11 @@ Next, only antibacterial phenotypes are taken into consideration. Antibiotics ar
 
 ![]({{site.baseurl}}/assets/f11.png)
 
-Figure 11 Box plot of RSA for antibiotics classes
+#### Figure 11 Box plot of RSA for antibiotics classes
 
 ![]({{site.baseurl}}/assets/f12.png)
  
-Figure 12 Box plot of DDG for antibiotics classes
+#### Figure 12 Box plot of DDG for antibiotics classes
 
 
 It is worth mentioning that further exploratory data analysis did not yield useful information. For example, using Principal Component Analysis to did not help improve accuracy of machine learning models. On the contrary – models seemed to perform slightly worse using principal components (results not included in this dissertation). The reason for applying this unsupervised machine learning technique is that in analysis of bioinformatics data, a unique challenge often arises from the high dimensionality of measurements. This dataset contains close to 700 features – all characteristics of a single mutation - many of which turn out to be highly correlated. 
@@ -100,7 +100,7 @@ Figure 13 shows baseline accuracy and best accuracy obtained for each model. The
 | Random Forest               | 0.95              | 0.906       | 0.966 | 
 
 
-Figure 13 Performance analysis
+#### Figure 13 Performance analysis
 
 The random forest yields a precision of 0.951, meaning that 95% of mutations are classified correctly (only 5% are misclassified). About 91% of growth-resistant mutations truly are (specificity), and 97% of mutations identified as antibacterial-resistant truly are (sensitivity).
 
@@ -108,7 +108,7 @@ Another useful application of random forests is the selection of relevant featur
 
 ![]({{site.baseurl}}/assets/f14.png)
 
-Figure 14 Feature importance
+#### Figure 14 Feature importance
 
 | PRED_DDG | Destabilizing effect of mutation                                               | 
 |----------|--------------------------------------------------------------------------------| 
@@ -135,7 +135,7 @@ A perfect prediction would yield a confusion matrix with positive numbers along 
 
 ![]({{site.baseurl}}/assets/f15.png)
  
-Figure 15 Confusion matrices for baseline predictors and the three models
+#### Figure 15 Confusion matrices for baseline predictors and the three models
 
 Note that even though logistic regression outperformed other algorithms, a closer inspection of mutations by antibiotics class (Table 2) reveals varying strengths across models for the prediction of individual antibiotics classes. These may not be as easily deduced from the confusion matrices alone. 
 
@@ -144,7 +144,7 @@ The random forest, for instance, was the best predictor for identifying mutation
 
 ![]({{site.baseurl}}/assets/t2.png)
 
-Table 2 Percentage of mutations correctly classified
+#### Table 2 Percentage of mutations correctly classified
 MR … Majority rule baseline
 RP … Random predictor baseline
 
