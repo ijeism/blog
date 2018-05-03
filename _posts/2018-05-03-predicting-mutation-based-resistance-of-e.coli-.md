@@ -142,22 +142,7 @@ Note that even though logistic regression outperformed other algorithms, a close
 The random forest, for instance, was the best predictor for identifying mutations of Aminoacids (class 0), on average correctly classifying 97% of them. This result is all the more significant, as the total number of records in this class is fairly small; it indicates that the features in this dataset may be quite useful to discriminate against Aminoacids using this model. Quinolones/Fluoroquinolones and Sulfonamides (9,10), on the other hand, are best identified by the logistic regression model, even if the percentages of correctly classified mutations are still quite low (49% and 58%, respectively). 
 
 
-| Class     | MR   | RP   | LR   | kNN  | RF   | Total | 
-|-----------|------|------|------|------|------|-------| 
-| 0         | 0    | 0.03 | 0    | 0.75 | 0.97 | 32    | 
-| 1         | 0    | 0.09 | 0.43 | 0.46 | 0.3  | 500   | 
-| 2         | 0    | 0.13 | 0.05 | 0.06 | 0.02 | 265   | 
-| 3         | 0    | 0.07 | 0    | 0    | 0    | 167   | 
-| 4         | 0    | 0.07 | 0.04 | 0.07 | 0.06 | 307   | 
-| 5         | 0    | 0.08 | 0.17 | 0.27 | 0.3  | 89    | 
-| 6         | 0    | 0.1  | 0    | 0.04 | 0    | 50    | 
-| 7         | 0    | 0.1  | 0.3  | 0.36 | 0.35 | 246   | 
-| 8         | 0    | 0.08 | 0.05 | 0.06 | 0.06 | 309   | 
-| 9         | 0    | 0.07 | 0.49 | 0.38 | 0.23 | 481   | 
-| 10        | 1    | 0.08 | 0.58 | 0.31 | 0.23 | 550   | 
-| 11        | 0    | 0    | 0.8  | 0.8  | 0.8  | 5     | 
-| 12        | 0    | 0.08 | 0.01 | 0.07 | 0.15 | 189   | 
-| % Correct | 0.17 | 0.08 | 0.28 | 0.25 | 0.19 | 3190  | 
+![]({{site.baseurl}}/assets/t2.png)
 
 Table 2 Percentage of mutations correctly classified
 MR … Majority rule baseline
