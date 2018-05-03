@@ -4,107 +4,75 @@ layout: post
 categories: machine learning; EDA
 author: I ON
 ---
-# Predicting NYC Shared Mobility - Exploratory Data Analysis
+# Predicting demand for shared mobility
 
-Following data pre-processing in Part 1 of this series, we conduct exploratory data analysis using R. 
+The question we ask is: for any given time of day, day of the week, and location, how accurately can we predict the demand for shared mobility, i.e. the number of shared mobility trips taken? 
 
-### Cyclical trends of demand
+## Problem
 
-Figure 1 depicts the cyclical trend of pickups throughout a week. Taxi, Uber, and Bike follow a similar cyclical trend in the sense that activity is high on weekdays and comparatively low on weekends. Activity for both taxi and Uber seems to peak on Wednesdays, while bike activity remains relatively stable across weekdays. On weekends, bike demand seems higher on Sundays, while Sundays show the lowest pickup activity for Taxi and Uber. Notice also how activity for Uber and Taxi tends to be highest on days with low temperatures, while this observation is not as clear from the bike graph.
- 
+This is a regression problem since the variable we are trying to predict is quantitative (the total number of pickups). Given a set of date, time, location, and weather features, the aim is to determine a model that predicts the target variable - number of trips – with reasonably high accuracy based on the value of its features. 
 
-![Picture1.png]({{site.baseurl}}/assets/Picture1.png)
- 
-Figure 1 Demand by weekday
+We run three different machine learning algorithms – linear regression, k-nearest neighbors (k-NN) regression, and random forest regression. Machine learning algorithms are used to leverage significant amounts of given data in order to extract some form of insight or knowledge and to ‘learn’ to make accurate predictions. Using Python’s scikit-learn library, all three algorithms are run several times with a varying combination of input variables and parameter settings specified for individual algorithms. 
 
-R code:
+## Model assessment
 
-{% highlight r %}
-# scatterplot of count versus weekday, with color scale based on temp
-p1 <- ggplot(ny, aes(wday, combined)) + geom_point(aes(color = mean_temp), alpha = 0.5) + 
-  scale_color_continuous(low = '#00A8C5', high='#FFFF7E') +
-  theme_minimal()
-p2 <- ggplot(ny, aes(wday, taxi)) + geom_point(aes(color = mean_temp), alpha = 0.5) + 
-  scale_color_continuous(low = '#00A8C5', high='#FFFF7E') +
-  theme_minimal()
-p3 <- ggplot(ny, aes(wday, uber)) + geom_point(aes(color = mean_temp), alpha = 0.5) + 
-  scale_color_continuous(low = '#00A8C5', high='#FFFF7E') +
-  ylim(0, 2000) +
-  theme_minimal()
-p4 <- ggplot(ny, aes(wday, bike)) + geom_point(aes(color = mean_temp), alpha = 0.5) + 
-  scale_color_continuous(low = '#00A8C5', high='#FFFF7E') +
-  theme_minimal()
-grid.arrange(p1, p2, p3, p4, ncol = 2, top = 'No of Pickups vs Weekday (by mean temperature)')
-{% endhighlight %}
+We begin by dividing our dataset into two: the first part consists of all trips in April, May, and up until June 23rd. This is treated as ‘historical’ data used for training and validation purposes.  The second part contains the remaining seven days of June are then used to test the model by simulating prediction into the ‘future’. Note that all regression results reported below are for models run on the first dataset only. The second dataset is used merely to produce the predicted dataset that is eventually fed into the web-based application.
 
-Figure 2 shows that on working days (first row), peak activity typically occurs during the morning hours (around 8am) and right after close of business (around 5pm), with somewhat increased activity also around lunchtime. This is the case across each type of transportation, although there are differences in the distribution of pickup activity throughout the day. 
+For useful assessment of model performance, we partition the dataset used for all machine learning algorithms: 70% are assigned to training data and the remaining 30% to test data. 
 
-Notice, again, that maximum pickup counts for Taxi and Uber seem to be highest when mean temperatures are lowest, while pickup activity on days with lower temperature tends to be lower for the Bike. This makes sense, since bike users are more exposed to weather conditions than car users.
+For the linear regression and the k-NN regression model we also perform 10-fold cross-validation across models, randomly partitioning our dataset into 10 equally sized subsamples and using each subsample once as the validation data for testing the model in 10 repeated cross-validation processes. The random forest regression already performs cross-validation by definition, since each bagged tree makes use of only a proportion of around two-thirds (on average) of the observation, leaving the remaining third of the observations out-of-bag. This means that the response for any particular instance can be predicted using all the trees in which that instance was not used to fit a given bag (James et al., 2015).
 
-On the other hand, pickup activity on non-working days (second row) follow a different pattern. Pickups for Taxi and Uber in particular are high during the very early morning hours (perhaps when people return home from a night out) and have another peak in the afternoon hours, with a slightly different distribution. Again, highest count tends to occur on days with low mean temperatures. Bike activity also shows a steady rise and fall during the afternoon hours, although to a much lesser extent on cooler days; somewhat increased activity equally occurs during early morning hours (from around midnight till 3-4 am).
+The root mean squared error (RMSE) is used to evaluate predictions, since it is one of the most intuitive and easily understandable metrics - having the units of the target associated with it (in our case the number of trips). It measures the standard deviation (measure of spread) of the residuals, i.e. the spread of the points about the fitted model. It essentially measures the ‘noise’ in the system. The RMSE is also often used for generating a range of uncertainty for predictions made. 
 
+In addition, the R2 is reported for each model to evaluate what percentage of the variation in the data the model explains. 
 
-![Picture1.png]({{site.baseurl}}/assets/Picture2.png)
+Fine-tuning of each machine learning model is done using sci-kit-learn’s grid search – a powerful hyper-parameter  optimization technique that can further help improve the performance of a model by finding the optimal combination of hyper-parameter values.
 
-Figure 2 Demand by hour (weekday vs. weekend)
+## Results
 
-R code:
-{% highlight r %}
-# scatterplot of count versus hour, with color scale based on temp
-pl1 <- ggplot(filter(ny, wknd == 0), aes(hour, combined)) 
-pl1 <- pl1 + geom_point(position = position_jitter(w = 1, h = 0), aes(color = mean_temp), alpha = 0.5)
-#pl1 <- pl1 + scale_color_gradientn(colours = c('dark blue','blue','light blue','light green','yellow','orange','red'))
-pl1 <- pl1 + scale_color_continuous(low = '#00A8C5', high='#FFFF7E')
-pl1 + theme_minimal()
+### Linear Regression
+We start out with a linear regression model, which is generally a useful tool for predicting quantitative responses. Table 2 shows the results of individual models. We find that the linear regression model performs rather poorly with an RMSE of 0.88 and an R2 of 25%. This indicates that the true relationship between our target and the features is most likely non-linear. The best performing estimator has a fitted intercept and does not use normalized features.
 
-pl2 <- ggplot(filter(ny, wknd == 0), aes(hour, uber)) 
-pl2 <- pl2 + geom_point(position = position_jitter(w = 1, h = 0), aes(color = mean_temp), alpha = 0.5)
-#pl2 <- pl2 + scale_color_gradientn(colours = c('dark blue','blue','light blue','light green','yellow','orange','red'))
-pl2 <- pl2 + scale_color_continuous(low = '#00A8C5', high='#FFFF7E')
-pl2 + theme_minimal()
+### K-NN Regression
+Next we turn to a non-parametric method, the k-nearest neighbor regression, which does not make any assumptions on the parametric form of the underlying relationship between features and target. It provides a much more flexible approach to performing regression. 
 
-pl3 <- ggplot(filter(ny, wknd == 0), aes(hour, bike)) 
-pl3 <- pl3 + geom_point(position = position_jitter(w = 1, h = 0), aes(color = mean_temp), alpha = 0.5)
-#pl3 <- pl3 + scale_color_gradientn(colours = c('dark blue','blue','light blue','light green','yellow','orange','red'))
-pl3 <- pl3 + scale_color_continuous(low = '#00A8C5', high='#FFFF7E') 
-pl3 + theme_minimal()
+Feature scaling is a crucial step in preprocessing data for this model, as it typically behaves much better if features are on the same scale; for the simple reason that, as most algorithms, it would otherwise be busy optimizing weights according to the larger errors in features of larger scales. The kNN algorithm in particular is a good example because it relies on computed distance measures that will inevitably be dominated by larger scale features (Raschka, 2015).
 
-pl4 <- ggplot(filter(ny, wknd == 1), aes(hour, combined)) 
-pl4 <- pl4 + geom_point(position = position_jitter(w = 1, h = 0), aes(color = mean_temp), alpha = 0.5)
-#pl4 <- pl4 + scale_color_gradientn(colours = c('dark blue','blue','light blue','light green','yellow','orange','red'))
-pl4 <- pl4 + scale_color_continuous(low = '#00A8C5', high='#FFFF7E')
-pl4 + theme_minimal()
+Indeed, this algorithm performs much better on our data, with an RMSE of 0.35 and an R2 of 88%. The best performing kNN estimator uses k=1 neighbors.
 
-pl5 <- ggplot(filter(ny, wknd == 1), aes(hour, uber)) 
-pl5 <- pl5 + geom_point(position = position_jitter(w = 1, h = 0), aes(color = mean_temp), alpha = 0.5)
-#pl5 <- pl5 + scale_color_gradientn(colours = c('dark blue','blue','light blue','light green','yellow','orange','red'))
-pl5 <- pl5 + scale_color_continuous(low = '#00A8C5', high='#FFFF7E')
-pl5 + theme_minimal()
+### Random Forest Regression
+Finally, we apply a random forest regression model. We choose this model because it is a powerful method for capturing highly non-linear and complex relationships between features and the target, prevents over fitting and is robust against outliers. An advantage of the decision tree algorithm is that it does not require any transformation of the features when dealing with nonlinear data (Raschka, 2015).
 
-pl6 <- ggplot(filter(ny, wknd == 1), aes(hour, bike)) 
-pl6 <- pl6 + geom_point(position = position_jitter(w = 1, h = 0), aes(color = mean_temp), alpha = 0.5)
-#pl6 <- pl6 + scale_color_gradientn(colours = c('dark blue','blue','light blue','light green','yellow','orange','red'))
-pl6 <- pl6 + scale_color_continuous(low = '#00A8C5', high='#FFFF7E')
-pl6 + theme_minimal()
-
-grid.arrange(pl1, pl2, pl3, pl4, pl5, pl6, ncol = 3, top = 'No of Pickups vs Hour\nWeekday', bottom = 'Weekend')
-{% endhighlight %}
+This model gives us by far the highest accuracy amongst the three models, with an RMSE of 0.14 and an R2 of 98%. The best performing Random Forest model uses 50 trees, a maximum depth of a tree of 30, and, as mentioned before, uses out-of-bag samples to estimate the R Squared on unseen data. See Appendix B for an excerpt of the code we used.
 
 
-## Location
+RMSE	|R-Squared
+---	|---
+Linear regression	|0.8806	0.2524	
+k-NN regression	0.3517	|0.8806	
+Random forest regression	|0.1338	0.9829	
+#### Table 2 Performance table 
 
-Figure 3 clearly shows a strong relationship between location and number of pickups. Pickup activity is focused on particular areas within NYC, which is reflected by higher counts (larger point sizes on the scatterplot) at certain lat/long intersections. Comparing the graphs for Taxi, Uber, and Bike, we can make out only subtle differences between the operation areas of the three transportation types (not depicted here). Overall there is a significant focus on the Manhattan area.
+To visualize the accuracy of the three models, Figure 5 depicts the correlation between real target values and predicted target values of each model.
+   
+![]({{site.baseurl}}//assets/p1.png) ![]({{site.baseurl}}//assets/p2.png) ![]({{site.baseurl}}//assets/p3.png)
 
-![Picture1.png]({{site.baseurl}}/assets/Picture3.png) 
+#### Figure 5 Correlation between predicted and real target values 
 
-Figure 3 Demand by location (Latitude vs. Longitude, by number of pickups)
+In terms of feature importance, latitude and longitude are by far the most important factors influencing the number of trips, followed by time of the day, day of the week, and whether the day is a weekend or not. The average daily temperature appears to be a more important weather factor than total daily precipitation. Least significant is whether it is a weekday or not.
 
-## Precipitation
+### Models by mode of transportation 
 
-Figure 4 illustrates the relationship between pickups and amount of rainfall and clearly shows how Bike pickups decrease with increasing precipitation. Uber pickups, on the other hand, seem to increase with precipitation while Taxi activity tends to drop with increased rainfall. 
+Given the different relationships we discovered during data exploration between pickup activity of the three transportation types and our set of features, we decide to split the dataset by mode of shared transportation - Taxi (we combine yellow taxi and green taxi into one category), Uber, and Citi Bike – and rerun the models. This will also provide the application user with more detailed information about demand for shared mobility at any given location and time.
 
-![Picture1.png]({{site.baseurl}}/assets/Picture4.png) 
+Best performing model in all cases remains the random forest regression (results of other models are not reported here). The model performs best when run on the taxi dataset, followed by the Bike and the Uber datasets (see Table 3).  
 
-Figure 4 Demand by rainfall (number of pickups vs. precipitation, by mean temperature)
+In line with our observations during data exploration, we find that average daily temperature and daily precipitation appear more important for predicting Citi Bike pickups than for predicting Uber or Taxi pickups; it makes sense that bike users would be more sensitive to weather conditions than car users.
 
-Full code can be found at XXX.
+
+RMSE	|R-Squared	
+---	|---
+Taxi	|0.1296	0.9839	
+Uber	|0.1461	0.9510	
+Bike	|0.1589	0.9682	
+#### Table 3 Model performance of random forest regression by type of service
