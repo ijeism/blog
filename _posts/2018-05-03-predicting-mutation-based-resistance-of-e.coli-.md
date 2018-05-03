@@ -1,6 +1,8 @@
 ---
-published: false
+published: true
 layout: post
+categories: machine learning; EDA
+author: I ON
 ---
 # Predicting mutation-based resistance of E.Coli using machine learning
 
@@ -171,7 +173,3 @@ This trade-off between the two measures plays an important role in deciding whic
 The results of the multiclass prediction problem may appear discouraging at first as all three models exhibit rather low overall accuracy. But the fact that some classes were predicted with much higher accuracy than others is promising and highlights the importance of this analysis. It is very costly to conduct tests to find out whether or not a particular mutation is resistant to any one antibiotic. Therefore being able to accurately predict tolerance phenotype through experimental design can be incredibly helpful, saving enormous amounts of resources. 
 
 This analysis underlines the importance of generating the information required to improve accuracy of predictions. In particular, it emphasizes the need i) for new indices that are context-specific; and ii) to extend the availability of 3D structures for proteins. Other context-specific properties can be calculated taking into account the atomistic environment of the mutation, such as, for example, a protein’s secondary structure. Does the mutation occur on an alpha helix or on a beta sheet? Secondary structure can be severely disrupted by some mutations. In addition, by recalculating AA indices while taking into consideration the environment, they can be rendered context-specific. Increasing the number of available protein structures can happen through expensive new experiments but also using much more cost-effective protein structure prediction techniques.
-
-
-
-
