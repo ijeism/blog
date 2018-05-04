@@ -200,14 +200,14 @@ def reducer3(self, key, value):
 {% endhighlight %}
 
 ### Step 4: Filtering for Recommendation
-The last part of the implementation is to derive recommendations for items based on the similarity score of the item pairs. This final step consists of only one reduce job. It is responsible for producing recommendations for a user related to a particular item in the form of a specified number of items that are top ranking based on their similarity score relative to that specific item. To achieve this, I construct a filter allowing us to specify records that contain a specific number (in our case the desired number of most similar products) or a string of text (in our case the item ID). One way to achieve this in Python is to: 
+The last part of the implementation is to derive recommendations for items based on the similarity score of the item pairs. This final step consists of only one reduce job. It is responsible for producing recommendations for a user related to a particular item in the form of a specified number of items that are top ranking based on their similarity score relative to that specific item. To achieve this, I construct a filter to specify records that contain a specific number (in our case the desired number of most similar products) or a string of text (in our case the item ID). One way to achieve this in Python is to: 
 
 i.	create a new list; 
 ii.	append all tuples (score, item1, item2, n) using the append() function;
-iii.	sort the list using the sort() function; and 
+iii.sort the list using the sort() function; and 
 iv.	slice the list to select only the specified number of tuples with highest scores. 
 
-Since the sort() function automatically sorts in ascending order, negative indices are used to slice the list relative to the end (McKinney, 2013). This allows us to select only the most similar items to recommend in relation to a particular item.
+Since the `sort()` function automatically sorts in ascending order, negative indices are used to slice the list relative to the end (McKinney, 2013). This allows to select only the most similar items to recommend in relation to a particular item.
 
 {% highlight python %}
 def reducer4(self, key, value):
