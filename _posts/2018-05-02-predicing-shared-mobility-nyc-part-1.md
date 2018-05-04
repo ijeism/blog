@@ -21,7 +21,10 @@ The general framework for this machine learning project is as follows:
 
 1. Data integration and cleaning
 2. Feature engineering
-3. Exploratory Data Analysis
+3. Exploratory data analysis
+4. Modelling and model assessment
+5. Prediction
+
 
 
 ## 1. Data integration and pre-processing
