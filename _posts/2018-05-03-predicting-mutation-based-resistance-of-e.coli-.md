@@ -34,7 +34,7 @@ Three main data sources used for this project are:
 
 First, data on individual mutations and associated phenotypes are extracted from the Resistome database. Phenotype will be used again at the prediction stage. Mutation data is then used to pull general physiochemical and biochemical properties that characterize individual mutations from the AAindex. Mutation data is further used in a two-step process involving the Uniprot Knowledge Base (UniprotKB) and the Protein Database (PDB) to generate information that enables retrieval of relevant context-specific properties via the R package rprotmut. 
 
-Data retrieval and integration for this project was quite lengthy and are beyond the scope of this post. The final dataset used for this analyis can be found > here.
+Data retrieval and integration for this project was quite lengthy and are beyond the scope of this post. The final dataset used for this analyis can be found [here](https://github.com/ijeism/ijeism.github.io/tree/master/predicting-phenotypes).
 
 ### 2. Exploratory Data Analysis
 
@@ -169,3 +169,6 @@ This trade-off between the two measures plays an important role in deciding whic
 The results of the multiclass prediction problem may appear discouraging at first as all three models exhibit rather low overall accuracy. But the fact that some classes were predicted with much higher accuracy than others is promising and highlights the importance of this analysis. It is very costly to conduct tests to find out whether or not a particular mutation is resistant to any one antibiotic. Therefore being able to accurately predict tolerance phenotype through experimental design can be incredibly helpful, saving enormous amounts of resources. 
 
 This analysis underlines the importance of generating the information required to improve accuracy of predictions. In particular, it emphasizes the need i) for new indices that are context-specific; and ii) to extend the availability of 3D structures for proteins. Other context-specific properties can be calculated taking into account the atomistic environment of the mutation, such as, for example, a protein’s secondary structure. Does the mutation occur on an alpha helix or on a beta sheet? Secondary structure can be severely disrupted by some mutations. In addition, by recalculating AA indices while taking into consideration the environment, they can be rendered context-specific. Increasing the number of available protein structures can happen through expensive new experiments but also using much more cost-effective protein structure prediction techniques.
+
+
+Data sets and code used for this exercise can be found [here](https://github.com/ijeism/ijeism.github.io/tree/master/predicting-phenotypes).
