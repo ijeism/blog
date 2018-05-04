@@ -292,3 +292,6 @@ Possible enhancements of this approach could involve experimenting with similari
 It is also noteworthy that running the program on applications that require real-time or low-latency data access will not work well with Hadoop's HDFS. Therefore, instead of storing the Hadoop sequence file into the HDFS, other frameworks such as HBase or Sqoop could be used to support real-time retrieval (Divya & Divya Krishnaveni, 2015; White, 2015).
 
 The collaborative filtering technique itself, however, is useful, particularly - although not exclusively - for recommendations to cold users. Once the purchase history of users starts to build, items can be recommended based on users' own ratings of products purchased and their similarity to other items not purchased. Using a combination of both item-based and user-based collaborative filtering, recommendation systems could provide even more accurate recommendations to users.
+
+***************
+Code used for this project can be found [here](https://github.com/ijeism/ijeism.github.io/tree/master/recommendation_system).
