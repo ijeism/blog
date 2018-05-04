@@ -20,7 +20,7 @@ General, updatable, and scalable code for various data extraction processes, suc
 
 1. Data sources
 2. Exploratory data analysis
-3. Machine learning
+3. Modelling and prediction
 4. Discussion
 
 ### 1. Data Sources
