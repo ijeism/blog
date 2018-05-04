@@ -50,7 +50,7 @@ At a high level, every MapReduce program transforms a list of input data element
 ## 2. Software design: collaborative filtering
 
 ### 2.1 Dataset
-For this project I use Amazon product data. The full dataset - available at http://jmcauley.ucsd.edu/data/amazon/ - contains a total of 142.8 million product reviews from Amazon, spanning May 1996 - July 2014. It includes reviews, product metadata, and links. I use the ratings-only dataset, which is a small subset including only (user, item, rating, timestamp) tuples. Of the 24 different categories available, I choose the 'Baby' category, consisting of 915,446 records.
+For this project I use Amazon product data. The full dataset - available [here](http://jmcauley.ucsd.edu/data/amazon/) - contains a total of 142.8 million product reviews from Amazon, spanning May 1996 - July 2014. It includes reviews, product metadata, and links. I use the ratings-only dataset, which is a small subset including only (user, item, rating, timestamp) tuples. Of the 24 different categories available, I choose the 'Baby' category, consisting of 915,446 records.
 
 An excerpt of the input data is shown below. The selection contains the first five rows of the comma-delimited dataset, where each line represents a reviewerID (or userID) followed by an itemID, the rating given by the user for that item, and an associated timestamp. For the purpose of this exercise, I require, and therefore extract, only the (userID, itemID, ratings) tuple.
 
