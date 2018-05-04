@@ -8,7 +8,7 @@ meta: Springfield
 ![]({{site.baseurl}}/assets/shared_mob.png)
 
 
-# Introduction
+## Introduction
 
 People need to move around to secure basic human needs. Mobility is more than a luxury - it contributes to the quality of life by enabling exploration, leisure and recreation. Well thought-out mobility solutions attract businesses and lead to the creation of jobs; as such they are necessary for any city to thrive. Mobility is therefore a key dynamic of urbanization and is widely cited as one of the most intractable, universal challenges faced by cities all over the world. (Arup & Schneider Electric, 2014).
 
@@ -27,7 +27,7 @@ The general framework for this machine learning project is as follows:
 
 
 
-## 1. Data integration and pre-processing
+# 1. Data integration and pre-processing
 Data for the three categories bike-sharing; ride-sourcing; and taxis & limos was used to gauge demand for shared mobility. I select three months’ worth of data, spanning the period of April 2014 - June 2014.
 
 Datasets:
@@ -46,7 +46,7 @@ In order to restrict our analysis to New York City, I subset the dataset to incl
 I also exclude any instances where either latitude or longitude take on a value of zero or have a missing value, as these are the two of the three variables required to make an instance useful for our analysis. 
 
 
-## 2. Feature engineering
+# 2. Feature engineering
 In order to extract more information out of our dataset, I create new variables using R. Specifically, I split the *DateTime* variable, resulting in three additional features *month* (three factors), *day* (30 or 31 factors, depending on the month), and *hour* (24 factors). I also create a variable *wday* (7 levels) to identify what day of the week each trip took place, as well as a variable binary *wknd* that takes the value 1 if the trip took place on either a Saturday or a Sunday, and 0 otherwise. 
 
 Next, I make use of the **geohash system** , which is a way to encode latitude and longitude into groups of nearby points on the globe with varying resolutions (Whelan, 2011). This allows me to then group together trips that were started (relatively) close by to obtain a number of trips taken at that approximate location at a particular time, *n.total*; this process also reduces the dimensionality of the dataset.  
@@ -85,9 +85,9 @@ precip_sum|Total daily precipitation by day|Numeric
 *Table 1 Metadata table*
 
 
-## 3. Exploratory Data Analysis 
+# 3. Exploratory Data Analysis 
 
-### 3.1 Cyclical trends of demand
+# 3.1 Cyclical trends of demand
 
 Figure 1 depicts the cyclical trend of pickups throughout a week. Taxi, Uber, and Bike follow a similar cyclical trend in the sense that activity is high on weekdays and comparatively low on weekends. Activity for both taxi and Uber seems to peak on Wednesdays, while bike activity remains relatively stable across weekdays. On weekends, bike demand seems higher on Sundays, while Sundays show the lowest pickup activity for Taxi and Uber. Notice also how activity for Uber and Taxi tends to be highest on days with low temperatures, while this observation is not as clear from the bike graph.
  
@@ -108,7 +108,7 @@ On the other hand, pickup activity on non-working days (second row) follow a dif
 Figure 2 Demand by hour (weekday vs. weekend)
 
 
-### 3.2 Location
+# 3.2 Location
 
 Figure 3 clearly shows a strong relationship between location and number of pickups. Pickup activity is focused on particular areas within NYC, which is reflected by higher counts (larger point sizes on the scatterplot) at certain lat/long intersections. Comparing the graphs for Taxi, Uber, and Bike, we can make out only subtle differences between the operation areas of the three transportation types (not depicted here). Overall there is a significant focus on the Manhattan area.
 
@@ -116,7 +116,7 @@ Figure 3 clearly shows a strong relationship between location and number of pick
 
 Figure 3 Demand by location (Latitude vs. Longitude, by number of pickups)
 
-### 3.3 Precipitation
+# 3.3 Precipitation
 
 Figure 4 illustrates the relationship between pickups and amount of rainfall and clearly shows how Bike pickups decrease with increasing precipitation. Uber pickups, on the other hand, seem to increase with precipitation while Taxi activity tends to drop with increased rainfall. 
 
