@@ -4,19 +4,19 @@ layout: post
 categories: machine learning; EDA
 author: I ON
 ---
-# Predicting demand for shared mobility
+![]({{site.baseurl}}/assets/shared_mob.png)
 
-*The question we ask is: for any given time of day, day of the week, and location, how accurately can we predict the demand for shared mobility, i.e. the number of shared mobility trips taken?* 
+# Predicting demand for shared mobility services
 
-## Problem
+*The question I ask is: for any given time of day, day of the week, and location, how accurately can we predict the demand for shared mobility, i.e. the number of shared mobility trips taken?* 
 
-This is a regression problem since the variable we are trying to predict is quantitative (the total number of pickups). Given a set of date, time, location, and weather features, the aim is to determine a model that predicts the target variable - number of trips – with reasonably high accuracy based on the value of its features. 
+## 4. Modelling and model assessment
 
-We run three different machine learning algorithms – linear regression, k-nearest neighbors (k-NN) regression, and random forest regression. Machine learning algorithms are used to leverage significant amounts of given data in order to extract some form of insight or knowledge and to ‘learn’ to make accurate predictions. Using Python’s scikit-learn library, all three algorithms are run several times with a varying combination of input variables and parameter settings specified for individual algorithms. 
+This is a regression problem since the variable I am trying to predict is quantitative (the total number of pickups). Given a set of date, time, location, and weather features, the aim is to determine a model that predicts the target variable - number of trips – with reasonably high accuracy based on the value of its features. 
 
-## Model assessment
+I run three different machine learning algorithms – **linear regression**, **k-nearest neighbors (k-NN) regression**, and **random forest regression**. Machine learning algorithms are used to leverage significant amounts of given data in order to extract some form of insight or knowledge and to ‘learn’ to make accurate predictions. Using Python’s scikit-learn library, all three algorithms are run several times with a varying combination of input variables and parameter settings specified for individual algorithms. 
 
-We begin by dividing our dataset into two: the first part consists of all trips in April, May, and up until June 23rd. This is treated as ‘historical’ data used for training and validation purposes.  The second part contains the remaining seven days of June are then used to test the model by simulating prediction into the ‘future’. Note that all regression results reported below are for models run on the first dataset only. The second dataset is used merely to produce the predicted dataset that is eventually fed into the web-based application.
+I begin by dividing our dataset into two: the first part consists of all trips in April, May, and up until June 23rd. This is treated as ‘historical’ data used for training and validation purposes.  The second part contains the remaining seven days of June are then used to test the model by simulating prediction into the ‘future’. Note that all regression results reported below are for models run on the first dataset only. The second dataset is used merely to produce the predicted dataset that is eventually fed into the web-based application.
 
 For useful assessment of model performance, we partition the dataset used for all machine learning algorithms: 70% are assigned to training data and the remaining 30% to test data. 
 
@@ -28,7 +28,7 @@ In addition, the R2 is reported for each model to evaluate what percentage of th
 
 Fine-tuning of each machine learning model is done using sci-kit-learn’s grid search – a powerful hyper-parameter  optimization technique that can further help improve the performance of a model by finding the optimal combination of hyper-parameter values.
 
-## Results
+## 5. Prediction
 
 ### Linear Regression
 We start out with a linear regression model, which is generally a useful tool for predicting quantitative responses. Table 2 shows the results of individual models. We find that the linear regression model performs rather poorly with an RMSE of 0.88 and an R2 of 25%. This indicates that the true relationship between our target and the features is most likely non-linear. The best performing estimator has a fitted intercept and does not use normalized features.
