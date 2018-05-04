@@ -82,7 +82,7 @@ wknd|Weekend|Binary
 mean_temp|Average temperature by day|Numeric
 precip_sum|Total daily precipitation by day|Numeric
 
-#### Table 1 Metadata table
+*Table 1 Metadata table*
 
 
 ## 3. Exploratory Data Analysis 
