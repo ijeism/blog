@@ -4,7 +4,9 @@ layout: post
 categories: machine learning; EDA
 author: I ON
 ---
+
 ![]({{site.baseurl}}/assets/protein.png)
+
 
 # Predicting mutation-based resistance of E.Coli using machine learning
 
@@ -25,8 +27,8 @@ General, updatable, and scalable code for various data extraction processes, suc
 
 ### 1. Data Sources
 
-Three main data sources used in this dissertation are:
-- the recently published [Resistome database](https://bitbucket.org/jdwinkler/resistome_release/overview) - a formidable source for genomic data related to resistance; 
+Three main data sources used for this project are:
+- the recently published [Resistome database](https://bitbucket.org/jdwinkler/resistome_release/overview), a formidable source for genomic data related to resistance; 
 - the [Amino Acid Index Database](http://www.genome.jp/aaindex/), which contains a large number of context-independent features related to the change in amino acid type; 
 - and an R package to predict protein stability by consensus analysis developed by a former student of the MSc Data Science and Analytics program at Brunel University for data on effects of single point mutations in proteins (Nahaul, 2016).
 
@@ -153,9 +155,9 @@ The random forest, for instance, was the best predictor for identifying mutation
 
 ![]({{site.baseurl}}/assets/t2.png)
 
-#### Table 2 Percentage of mutations correctly classified
-#### MR … Majority rule baseline
-#### RP … Random predictor baseline
+*Table 2 Percentage of mutations correctly classified*
+*MR … Majority rule baseline*
+*RP … Random predictor baseline*
 
 ### Discussion
 For the binary classification problem, the random forest is the best performing model in terms of accuracy. Thus, on the surface, it might seem to be the obvious choice for anyone seeking to predict mutationally-acquired tolerance phenotypes. However, inspecting the results more closely reveals perhaps less evident choices, highlighting the issue of trade-off between sensitivity and specificity. Sensitivity is essentially how good the model is at correctly classifying positives, i.e. antibacterial-resistant mutations, while specificity is a measure of how accurate the model identifies a negative result, i.e. growth-resistant mutations. 
