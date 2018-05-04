@@ -121,4 +121,4 @@ Figure 4 illustrates the relationship between pickups and amount of rainfall and
 
 Figure 4 Demand by rainfall (number of pickups vs. precipitation, by mean temperature)
 
-Full code can be found [here](https://github.com/ijeism/ijeism.github.io/tree/master/predicting_shared_mobility). Hop over to [Part 2](https://github.com/ijeism/ijeism.github.io/tree/master/predicting_shared_mobility) to see how I applied machine learning algorithms to predict demand for shared mobility services.
+Full code can be found [here](https://github.com/ijeism/ijeism.github.io/tree/master/predicting_shared_mobility). Hop over to [Part 2]https://ijeism.github.io/blog/machine/learning;/eda/2018/05/02/predicting-shared-mobility-nyc-part-2.html to see how I applied machine learning algorithms to predict demand for shared mobility services.
