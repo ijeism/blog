@@ -51,6 +51,7 @@ This model gives us by far the highest accuracy amongst the three models, with a
 |Linear regression	|0.8806	0.2524|	
 |k-NN regression	0.3517	|0.8806|	
 |Random forest regression	|0.1338	0.9829|	
+
 *Table 2 Performance table* 
 
 To visualize the accuracy of the three models, Figure 5 depicts the correlation between real target values and predicted target values of each model.
@@ -75,6 +76,7 @@ RMSE	|R-Squared
 Taxi	|0.1296	0.9839	
 Uber	|0.1461	0.9510	
 Bike	|0.1589	0.9682	
+
 *Table 3 Model performance of random forest regression by type of service*
 
 
