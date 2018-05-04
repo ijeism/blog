@@ -6,11 +6,11 @@ author: I ON
 ---
 ![]({{site.baseurl}}/assets/shared_mob.png)
 
-# Predicting demand for shared mobility services
+## Predicting demand for shared mobility services
 
 *The question I ask is: for any given time of day, day of the week, and location, how accurately can we predict the demand for shared mobility, i.e. the number of shared mobility trips taken?* 
 
-## 4. Modelling and model assessment
+# 4. Modelling and model assessment
 
 This is a regression problem since the variable I am trying to predict is quantitative (the total number of pickups). Given a set of date, time, location, and weather features, the aim is to determine a model that predicts the target variable - number of trips – with reasonably high accuracy based on the value of its features. 
 
@@ -28,19 +28,19 @@ In addition, the R2 is reported for each model to evaluate what percentage of th
 
 Fine-tuning of each machine learning model is done using sci-kit-learn’s grid search – a powerful hyper-parameter  optimization technique that can further help improve the performance of a model by finding the optimal combination of hyper-parameter values.
 
-## 5. Prediction
+# 5. Prediction
 
-### Linear Regression
+# Linear Regression
 I start out with a linear regression model, which is generally a useful tool for predicting quantitative responses. Table 2 shows the results of individual models. I find that the linear regression model performs rather poorly with an RMSE of 0.88 and an R2 of 25%. This indicates that the true relationship between our target and the features is most likely non-linear. The best performing estimator has a fitted intercept and does not use normalized features.
 
-### K-NN Regression
+# K-NN Regression
 Next I turn to a non-parametric method, the k-nearest neighbor regression, which does not make any assumptions on the parametric form of the underlying relationship between features and target. It provides a much more flexible approach to performing regression. 
 
 Feature scaling is a crucial step in preprocessing data for this model, as it typically behaves much better if features are on the same scale; for the simple reason that, as most algorithms, it would otherwise be busy optimizing weights according to the larger errors in features of larger scales. The kNN algorithm in particular is a good example because it relies on computed distance measures that will inevitably be dominated by larger scale features (Raschka, 2015).
 
 Indeed, this algorithm performs much better on the data, with an RMSE of 0.35 and an R2 of 88%. The best performing kNN estimator uses k=1 neighbors.
 
-### Random Forest Regression
+# Random Forest Regression
 Finally, I apply a random forest regression model. I choose this model because it is a powerful method for capturing highly non-linear and complex relationships between features and the target, prevents over fitting and is robust against outliers. An advantage of the decision tree algorithm is that it does not require any transformation of the features when dealing with nonlinear data (Raschka, 2015).
 
 This model gives us by far the highest accuracy amongst the three models, with an RMSE of 0.14 and an R2 of 98%. The best performing Random Forest model uses 50 trees, a maximum depth of a tree of 30, and, as mentioned before, uses out-of-bag samples to estimate the R Squared on unseen data. 
@@ -61,7 +61,7 @@ To visualize the accuracy of the three models, Figure 5 depicts the correlation 
 
 In terms of feature importance, latitude and longitude are by far the most important factors influencing the number of trips, followed by time of the day, day of the week, and whether the day is a weekend or not. The average daily temperature appears to be a more important weather factor than total daily precipitation. Least significant is whether it is a weekday or not.
 
-### Models by mode of transportation 
+# Models by mode of transportation 
 
 Given the different relationships I discovered during data exploration between pickup activity of the three transportation types and our set of features, I decide to split the dataset by mode of shared transportation - Taxi (I collapse yellow taxi and green taxi into one variable), Uber, and Citi Bike – and rerun the models. This will also provide the application user with more detailed information about demand for shared mobility at any given location and time.
 
@@ -78,7 +78,7 @@ Bike	|0.1589	0.9682
 *Table 3 Model performance of random forest regression by type of service*
 
 
-## Final words
+# Final words
 
 The aim of the project was to develop a data-driven solution to predict the demand for shared mobility services, given selected features from a dataset i.e. the time of the day, day of the week, and location.
 
