@@ -89,3 +89,6 @@ I took into consideration the role of five variables (and engineered versions of
 This algorithm could be fed into an application focused on predicting the number of pickups to allow users to query predicted demand for shared mobility services by time and location. 
 
 The algorithm also helped discover that location is by far the most important factor influencing the number of pickups, followed by time of the day and the day of the week.
+
+**********************************************
+Code used for this project can be found [here](https://github.com/ijeism/ijeism.github.io/tree/master/predicting_shared_mobility).
