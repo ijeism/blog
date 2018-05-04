@@ -4,6 +4,8 @@ layout: post
 categories: machine learning; EDA
 author: I ON
 ---
+![]({{site.baseurl}}/assets/protein.png)
+
 # Predicting mutation-based resistance of E.Coli using machine learning
 
 The aim of this project was to develop a predictive model for resistance phenotypes that accurately classifies resistance phenotypes on the basis of genotype represented by features of protein mutations.
